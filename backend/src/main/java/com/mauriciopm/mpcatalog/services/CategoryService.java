@@ -1,5 +1,6 @@
 package com.mauriciopm.mpcatalog.services;
 
+import com.mauriciopm.mpcatalog.dto.CategoryDTO;
 import com.mauriciopm.mpcatalog.entities.Category;
 import com.mauriciopm.mpcatalog.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,12 @@ import java.util.List;
 public class CategoryService {
 
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryRepository repository;
 
     @Transactional
-    public List<Category> findAll(){
-        return categoryRepository.findAll();
+    public List<CategoryDTO> findAll(){
+        List<Category> list = repository.findAll();
+        List<CategoryDTO> result=list.stream().map(x->new CategoryDTO(x)).toList();
+        return result;
     }
 }

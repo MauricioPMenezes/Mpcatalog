@@ -1,5 +1,6 @@
 package com.mauriciopm.mpcatalog.controllers;
 
+import com.mauriciopm.mpcatalog.dto.CategoryDTO;
 import com.mauriciopm.mpcatalog.entities.Category;
 import com.mauriciopm.mpcatalog.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,8 @@ public class CategoryController {
     private CategoryService service;
 
     @GetMapping
-    public ResponseEntity<List<Category>> findAll(){
-        List<Category> list = service.findAll();
+    public ResponseEntity<List<CategoryDTO>> findAll(){
+        List<CategoryDTO> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 
