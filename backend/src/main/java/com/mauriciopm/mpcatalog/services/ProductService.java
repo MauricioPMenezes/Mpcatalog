@@ -1,5 +1,7 @@
 package com.mauriciopm.mpcatalog.services;
 
+import com.mauriciopm.mpcatalog.dto.CategoryDTO;
+import com.mauriciopm.mpcatalog.dto.ProductDTO;
 import com.mauriciopm.mpcatalog.entities.Category;
 import com.mauriciopm.mpcatalog.entities.Product;
 import com.mauriciopm.mpcatalog.repositories.CategoryRepository;
@@ -20,6 +22,12 @@ public class ProductService {
     @Transactional
     public List<Product> findAll(){
         return repository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public ProductDTO findById(Long id) {
+        Product list = repository.findById(id).get();
+        return new ProductDTO(list);
     }
 }
 
