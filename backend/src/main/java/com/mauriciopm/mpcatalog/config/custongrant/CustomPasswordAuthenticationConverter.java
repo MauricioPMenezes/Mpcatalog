@@ -1,4 +1,4 @@
-package com.devsuperior.mpcommerce.config.custongrant;
+package com.mauriciopm.mpcatalog.config.custongrant;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.lang.Nullable;

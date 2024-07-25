@@ -1,4 +1,4 @@
-package com.devsuperior.mpcommerce.config.config.customgrant;
+package com.mauriciopm.mpcatalog.config.config.customgrant;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.lang.Nullable;

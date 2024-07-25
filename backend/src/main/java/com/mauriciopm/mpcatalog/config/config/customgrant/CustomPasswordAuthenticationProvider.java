@@ -1,4 +1,4 @@
-package com.devsuperior.mpcommerce.config.config.customgrant;
+package com.mauriciopm.mpcatalog.config.config.customgrant;
 
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;

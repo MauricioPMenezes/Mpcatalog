@@ -1,4 +1,4 @@
-package com.devsuperior.mpcommerce.config;
+package com.mauriciopm.mpcatalog.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
