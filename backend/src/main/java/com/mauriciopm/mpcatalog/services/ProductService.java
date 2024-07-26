@@ -4,6 +4,7 @@ import com.mauriciopm.mpcatalog.dto.ProductDTO;
 import com.mauriciopm.mpcatalog.dto.ProductMinDTO;
 import com.mauriciopm.mpcatalog.entities.Product;
 import com.mauriciopm.mpcatalog.repositories.ProductRepository;
+import com.mauriciopm.mpcatalog.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +28,8 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public ProductDTO findById(Long id) {
-        Product list = repository.findById(id).get();
+        Product list = repository.findById(id).orElseThrow(
+                ()-> new ResourceNotFoundException("Recurso não encontrado!"));
         return new ProductDTO(list);
     }
 }
