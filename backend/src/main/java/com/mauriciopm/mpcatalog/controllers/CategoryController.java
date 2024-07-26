@@ -4,6 +4,8 @@ import com.mauriciopm.mpcatalog.dto.CategoryDTO;
 import com.mauriciopm.mpcatalog.entities.Category;
 import com.mauriciopm.mpcatalog.entities.Product;
 import com.mauriciopm.mpcatalog.services.CategoryService;
+import com.mauriciopm.mpcatalog.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,8 +29,12 @@ public class CategoryController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<CategoryDTO> findById(@PathVariable Long id) {
-         CategoryDTO dto = service.findById(id);
-        return ResponseEntity.ok(dto);
+        try {
+            CategoryDTO dto = service.findById(id);
+            return ResponseEntity.ok(dto);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Recurso não encontrado!");
+        }
     }
 
 
