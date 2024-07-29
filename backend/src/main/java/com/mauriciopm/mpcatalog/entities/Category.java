@@ -1,6 +1,8 @@
 package com.mauriciopm.mpcatalog.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -14,9 +16,11 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull
+    @NotEmpty(message="Campo nome Requerido")
+    @Column(unique = true)
     private String name;
-
-
 
 
     public Category(){

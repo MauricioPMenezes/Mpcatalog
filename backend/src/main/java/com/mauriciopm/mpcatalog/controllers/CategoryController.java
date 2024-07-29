@@ -1,17 +1,14 @@
 package com.mauriciopm.mpcatalog.controllers;
 
 import com.mauriciopm.mpcatalog.dto.CategoryDTO;
-import com.mauriciopm.mpcatalog.entities.Category;
-import com.mauriciopm.mpcatalog.entities.Product;
 import com.mauriciopm.mpcatalog.services.CategoryService;
-import com.mauriciopm.mpcatalog.services.exceptions.ResourceNotFoundException;
-import jakarta.persistence.EntityNotFoundException;
+import com.mauriciopm.mpcatalog.services.exceptions.DatabaseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -29,12 +26,15 @@ public class CategoryController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<CategoryDTO> findById(@PathVariable Long id) {
-        try {
             CategoryDTO dto = service.findById(id);
             return ResponseEntity.ok(dto);
-        } catch (EntityNotFoundException e) {
-            throw new ResourceNotFoundException("Recurso não encontrado!");
-        }
+    }
+    @PostMapping
+    public ResponseEntity<CategoryDTO> insertCategory(@RequestBody CategoryDTO dto) {
+        dto = service.insertCategory(dto);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(dto.getId()).toUri();
+        return ResponseEntity.created(uri).body(dto);
     }
 
 
