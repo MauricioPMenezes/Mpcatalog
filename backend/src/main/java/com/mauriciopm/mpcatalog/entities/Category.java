@@ -19,7 +19,6 @@ public class Category {
 
     @NotNull
     @NotEmpty(message="Campo nome Requerido")
-    @Column(unique = true)
     private String name;
 
 

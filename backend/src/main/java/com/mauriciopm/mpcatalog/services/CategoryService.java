@@ -7,7 +7,9 @@ import com.mauriciopm.mpcatalog.services.exceptions.DatabaseException;
 import com.mauriciopm.mpcatalog.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -35,16 +37,14 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryDTO insertCategory(CategoryDTO dto) {
-        if (repository.existsByName(dto.getName().toString())) {
+    public CategoryDTO insert(CategoryDTO dto) {
+        if (repository.existsByName(dto.getName())) {
             // Caso uma categoria com o mesmo nome já exista, pode lançar uma exceção ou retornar uma mensagem
             throw new DatabaseException("Uma Categoria com este nome ja Existe");
         }
-
         Category entity = new Category();
         entity.setName(dto.getName());
         entity = repository.save(entity);
-
         return new CategoryDTO(entity);
     }
 
@@ -53,13 +53,28 @@ public class CategoryService {
         try {
             Category entity = repository.getReferenceById(id);
             entity.setName(dto.getName());
-            entity =repository.save(entity);
-            return  new CategoryDTO(entity);
+            entity = repository.save(entity);
+            return new CategoryDTO(entity);
 
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
 
-            throw new ResourceNotFoundException("ID "+id+" NOT FOUND");
+            throw new ResourceNotFoundException("ID " + id + " NOT FOUND");
 
         }
+
+    }
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void delete(Long id) {
+
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundException("ID " + id + " NOT FOUND");
+        }
+        try{
+            repository.deleteById(id);
+
+        }catch (DataIntegrityViolationException e){
+            throw new DatabaseException("Falha de Integridade Referencial");
+        }
+
     }
 }
