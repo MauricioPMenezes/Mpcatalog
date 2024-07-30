@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -21,6 +22,11 @@ public class Category {
     @NotEmpty(message="Campo nome Requerido")
     private String name;
 
+    @Column(columnDefinition= "TIMESTAMP WITHOUT TIME ZONE" )
+    private Instant createdAt;
+
+    @Column(columnDefinition= "TIMESTAMP WITHOUT TIME ZONE" )
+    private Instant updatedAt;
 
     public Category(){
 
@@ -47,6 +53,22 @@ public class Category {
         this.name = name;
     }
 
+    public Instant getCreatedAT() {
+        return createdAt;
+    }
+    public Instant getUpdatedAT() {
+        return updatedAt;
+    }
+
+    @PrePersist
+    public void prePersist(){
+        createdAt =Instant.now();
+    }
+
+    @PreUpdate
+    public void preUpdate(){
+        updatedAt =Instant.now();
+    }
 
     @Override
     public boolean equals(Object o) {
