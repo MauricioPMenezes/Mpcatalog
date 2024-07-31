@@ -1,7 +1,6 @@
 package com.mauriciopm.mpcatalog.repositories;
 
-import com.mauriciopm.mpcatalog.dto.ProductDTO;
-import com.mauriciopm.mpcatalog.entities.Category;
+
 import com.mauriciopm.mpcatalog.entities.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,4 +17,5 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     Page<Product> searchByName(String name, Pageable pageable);
 
 
+    boolean existsByName(String name);
 }

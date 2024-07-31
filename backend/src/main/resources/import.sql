@@ -1,30 +1,6 @@
 INSERT INTO tb_category(name, created_At) VALUES ('Livros', NOW());
 INSERT INTO tb_category(name, created_At) VALUES ('Eletrônicos', NOW());
 INSERT INTO tb_category(name, created_At) VALUES ('Computadores', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Livros', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Eletrônicos', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Computadores', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Livros', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Eletrônicos', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Computadores', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Livros', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Eletrônicos', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Computadores', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Livros', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Eletrônicos', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Computadores', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Livros', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Eletrônicos', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Computadores', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Livros', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Eletrônicos', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Computadores', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Livros', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Eletrônicos', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Computadores', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Livros', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Eletrônicos', NOW());
-INSERT INTO tb_category(name, created_At) VALUES ('Computadores', NOW());
 
 
 INSERT INTO tb_product (name, price, description, img_url) VALUES ('The Lord of the Rings', 90.5, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/1-big.jpg');
