@@ -5,6 +5,7 @@ import com.mauriciopm.mpcatalog.dto.ProductDTO;
 import com.mauriciopm.mpcatalog.dto.ProductMinDTO;
 import com.mauriciopm.mpcatalog.entities.Category;
 import com.mauriciopm.mpcatalog.entities.Product;
+import com.mauriciopm.mpcatalog.repositories.CategoryRepository;
 import com.mauriciopm.mpcatalog.repositories.ProductRepository;
 import com.mauriciopm.mpcatalog.services.exceptions.DatabaseException;
 import com.mauriciopm.mpcatalog.services.exceptions.ResourceNotFoundException;
@@ -26,18 +27,20 @@ public class ProductService {
     @Autowired
     private ProductRepository repository;
 
+    @Autowired
+    private CategoryRepository categoryRepository;
+
     @Transactional(readOnly = true)
     public ProductDTO findById(Long id){
         Product entity = repository.findById(id).orElseThrow(
                 ()-> new ResourceNotFoundException("Recurso não encontrado!"));
         return new ProductDTO(entity,entity.getCategories());
-
     }
-    @Transactional(readOnly = true)
-    public Page<ProductMinDTO> findAll(String name, Pageable pageable, PageRequest pageRequest){
-        Page<Product> result= repository.searchByName(name,pageable,pageRequest);
-        return result.map(x->new ProductMinDTO(x));
 
+    @Transactional(readOnly = true)
+    public Page<ProductMinDTO> findAll(String name, Pageable pageable ){
+        Page<Product> result= repository.searchByName(name,pageable);
+        return result.map(x->new ProductMinDTO(x));
     }
 
     @Transactional
@@ -47,7 +50,6 @@ public class ProductService {
         CopyDtoToEntity(dto,entity);
         entity =repository.save(entity);
         return new ProductDTO(entity,entity.getCategories());
-
     }
 
     @Transactional
@@ -61,7 +63,6 @@ public class ProductService {
 
             throw new ResourceNotFoundException("Recurso não encontrado");
         }
-
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
@@ -77,7 +78,6 @@ public class ProductService {
         }
     }
 
-
     private void CopyDtoToEntity(ProductDTO dto, Product entity) {
 
         entity.setName(dto.getName());
@@ -87,12 +87,8 @@ public class ProductService {
 
         entity.getCategories().clear();
         for(CategoryDTO catDto : dto.getCategories()){
-            Category cat = new Category();
-            cat.setId(catDto.getId());
+            Category cat = categoryRepository.getOne(catDto.getId());
             entity.getCategories().add(cat);
-
         }
-
     }
-
 }
