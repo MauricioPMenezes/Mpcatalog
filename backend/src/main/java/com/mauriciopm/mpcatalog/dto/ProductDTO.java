@@ -43,10 +43,12 @@ public class ProductDTO {
         description = entity.getDescription();
         price = entity.getPrice();
         imgUrl = entity.getImgUrl();
-        for(Category cat : entity.getCategories()){
-            categories.add(new CategoryDTO(cat));
-        }
 
+    }
+
+    public ProductDTO(Product entity, Set<Category> categories) {
+        this(entity);
+        categories.forEach(cat-> this.categories.add(new CategoryDTO(cat)));
     }
 
     public Long getId() {

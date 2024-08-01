@@ -12,10 +12,12 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Service
@@ -26,14 +28,14 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public ProductDTO findById(Long id){
-        Product product = repository.findById(id).orElseThrow(
+        Product entity = repository.findById(id).orElseThrow(
                 ()-> new ResourceNotFoundException("Recurso não encontrado!"));
-        return new ProductDTO(product);
+        return new ProductDTO(entity,entity.getCategories());
 
     }
     @Transactional(readOnly = true)
-    public Page<ProductMinDTO> findAll(String name, Pageable pageable){
-        Page<Product> result= repository.searchByName(name,pageable);
+    public Page<ProductMinDTO> findAll(String name, Pageable pageable, PageRequest pageRequest){
+        Page<Product> result= repository.searchByName(name,pageable,pageRequest);
         return result.map(x->new ProductMinDTO(x));
 
     }
@@ -44,7 +46,7 @@ public class ProductService {
         Product  entity = new Product();
         CopyDtoToEntity(dto,entity);
         entity =repository.save(entity);
-        return new ProductDTO(entity);
+        return new ProductDTO(entity,entity.getCategories());
 
     }
 
@@ -54,7 +56,7 @@ public class ProductService {
             Product  entity =repository.getReferenceById(id);
             CopyDtoToEntity(dto,entity);
             entity =repository.save(entity);
-            return new ProductDTO(entity);
+            return new ProductDTO(entity,entity.getCategories());
         }catch (EntityNotFoundException e){
 
             throw new ResourceNotFoundException("Recurso não encontrado");

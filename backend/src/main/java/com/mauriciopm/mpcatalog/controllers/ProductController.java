@@ -1,5 +1,6 @@
 package com.mauriciopm.mpcatalog.controllers;
 
+import com.mauriciopm.mpcatalog.dto.CategoryDTO;
 import com.mauriciopm.mpcatalog.dto.ProductDTO;
 import com.mauriciopm.mpcatalog.dto.ProductMinDTO;
 import com.mauriciopm.mpcatalog.services.ProductService;
@@ -24,18 +25,33 @@ public class ProductController {
     private ProductService service;
 
 
+//    @GetMapping
+//    public ResponseEntity<Page<ProductMinDTO>> findAll(
+//            @RequestParam(name = "name", defaultValue = "") String name, Pageable pageable) {
+//        try {
+//            Page<ProductMinDTO> dto = service.findAll(name,pageable);
+//            return ResponseEntity.ok(dto);
+//        } catch (EntityNotFoundException e) {
+//            throw new ResourceNotFoundException("Recurso não encontrado!");
+//        }
+//    }
+
+
+
     @GetMapping
     public ResponseEntity<Page<ProductMinDTO>> findAll(
-            @RequestParam(name = "name", defaultValue = "") String name, Pageable pageable) {
-        try {
-            Page<ProductMinDTO> dto = service.findAll(name,pageable);
-            return ResponseEntity.ok(dto);
-        } catch (EntityNotFoundException e) {
-            throw new ResourceNotFoundException("Recurso não encontrado!");
-        }
+            @RequestParam(value = "page" , defaultValue ="0" ) Integer page,
+            @RequestParam(value = "name" , defaultValue ="" ) String  name,
+            @RequestParam(value = "linesPerPage" , defaultValue ="8" ) Integer linesPerPage,
+            @RequestParam(value = "direction" , defaultValue ="ASC" ) String direction,
+            @RequestParam(value = "OrderBy" , defaultValue ="name" ) String orderBy,
+            Pageable pageable){
+        PageRequest pageRequest = PageRequest.of(page,linesPerPage, Sort.Direction.valueOf(direction), orderBy);
+
+        Page<ProductMinDTO> list = service.findAll( name,pageable,pageRequest);
+
+        return ResponseEntity.ok(list);
     }
-
-
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<ProductDTO> findById(@PathVariable Long id) {
