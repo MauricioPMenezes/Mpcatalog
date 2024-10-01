@@ -3,6 +3,7 @@ package com.mauriciopm.mpcatalog.services;
 import com.mauriciopm.mpcatalog.dto.ProductDTO;
 import com.mauriciopm.mpcatalog.dto.ProductMinDTO;
 import com.mauriciopm.mpcatalog.entities.Product;
+import com.mauriciopm.mpcatalog.repositories.CategoryRepository;
 import com.mauriciopm.mpcatalog.repositories.ProductRepository;
 import com.mauriciopm.mpcatalog.services.exceptions.DatabaseException;
 import com.mauriciopm.mpcatalog.services.exceptions.ResourceNotFoundException;
@@ -34,6 +35,9 @@ public class ProductServiceTests {
 
     @Mock
     private ProductRepository repository;
+
+    @Mock
+    private CategoryRepository categoryRepository;
 
     private long existingId;
     private long nonExistingId;
@@ -112,4 +116,25 @@ public class ProductServiceTests {
         Mockito.verify(repository,Mockito.times(1)).findAll(pageable);
 
     }
+
+    @Test
+    public void findByIdShouldAndReturnProductDTOWhenIdExisting(){
+
+        ProductDTO result = service.findById(existingId);
+        Assertions.assertNotNull(result);
+        Mockito.verify(repository,Mockito.times(1)).findById(existingId);
+
+    }
+
+    @Test
+    public void findByIdShouldResourceNotFoundExceptionWhenIdNotExisting() {
+
+        Assertions.assertThrows(ResourceNotFoundException.class,()-> {
+            ProductDTO result = service.findById(nonExistingId);
+            Mockito.verify(repository,Mockito.times(1)).findById(nonExistingId);
+
+        });
+
+    }
+
 }
