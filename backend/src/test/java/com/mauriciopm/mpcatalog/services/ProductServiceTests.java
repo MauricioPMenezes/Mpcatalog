@@ -1,6 +1,7 @@
 package com.mauriciopm.mpcatalog.services;
 
 import com.mauriciopm.mpcatalog.repositories.ProductRepository;
+import com.mauriciopm.mpcatalog.services.exceptions.ResourceNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,6 +29,7 @@ public class ProductServiceTests {
     void setUp() throws Exception{
         existingId =1L;
         nonExistingId = 1000L;
+        dependentId = 3L;
         Mockito.doNothing().when(repository).deleteById(existingId);
         Mockito.doThrow(EmptyResultDataAccessException.class).when(repository).deleteById(nonExistingId);
 
@@ -44,5 +46,15 @@ public class ProductServiceTests {
         });
 
         Mockito.verify(repository).deleteById(existingId);
+    }
+
+
+    @Test
+    public void deleteShouldThrowResourceNotFoundExceptionWhenIdDoesNotExists(){
+
+        Assertions.assertThrows(ResourceNotFoundException.class,()-> {
+            service.delete(nonExistingId);
+        });
+
     }
 }
