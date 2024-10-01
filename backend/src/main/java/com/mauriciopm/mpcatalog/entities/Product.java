@@ -2,7 +2,6 @@ package com.mauriciopm.mpcatalog.entities;
 
 import jakarta.persistence.*;
 
-import java.time.Instant;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -25,7 +24,7 @@ public class Product {
     @JoinTable(name = "tb_product_category",
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<Category> categories = new HashSet<>(); // poder ter muitos produtos e muitas caterogias
+    private Set<com.mauriciopm.mpcatalog.entities.Category> categories = new HashSet<>(); // poder ter muitos produtos e muitas caterogias
 
 
 
