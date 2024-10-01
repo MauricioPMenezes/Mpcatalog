@@ -41,6 +41,12 @@ public class ProductService {
         return result.map(x->new ProductMinDTO(x));
     }
 
+    @Transactional(readOnly = true)
+    public Page<ProductDTO> findAllPaged(Pageable pageable){
+        Page<Product> result= repository.findAll(pageable);
+        return result.map(x->new ProductDTO(x));
+    }
+
     @Transactional
     public ProductDTO insert(ProductDTO dto){
 
