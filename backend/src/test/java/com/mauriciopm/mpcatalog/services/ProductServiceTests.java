@@ -1,6 +1,7 @@
 package com.mauriciopm.mpcatalog.services;
 
 import com.mauriciopm.mpcatalog.repositories.ProductRepository;
+import com.mauriciopm.mpcatalog.services.exceptions.DatabaseException;
 import com.mauriciopm.mpcatalog.services.exceptions.ResourceNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -29,9 +31,9 @@ public class ProductServiceTests {
     void setUp() throws Exception{
         existingId =1L;
         nonExistingId = 1000L;
-        dependentId = 3L;
+        dependentId = 4L;
         Mockito.doNothing().when(repository).deleteById(existingId);
-        Mockito.doThrow(EmptyResultDataAccessException.class).when(repository).deleteById(nonExistingId);
+        Mockito.doThrow(DataIntegrityViolationException.class).when(repository).deleteById(dependentId);
 
         Mockito.when(repository.existsById(existingId)).thenReturn(true);
         Mockito.when(repository.existsById(nonExistingId)).thenReturn(false);
@@ -54,6 +56,15 @@ public class ProductServiceTests {
 
         Assertions.assertThrows(ResourceNotFoundException.class,()-> {
             service.delete(nonExistingId);
+        });
+
+    }
+
+    @Test
+    public void deleteShouldThrowDatabaseExceptionWhenDependentId(){
+
+        Assertions.assertThrows(DatabaseException.class,()-> {
+            service.delete(dependentId);
         });
 
     }
