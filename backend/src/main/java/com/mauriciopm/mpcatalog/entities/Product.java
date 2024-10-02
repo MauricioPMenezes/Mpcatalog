@@ -54,8 +54,8 @@ public class Product {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String nome) {
+        this.name = nome;
     }
 
     public String getDescription() {

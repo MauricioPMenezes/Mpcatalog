@@ -1,31 +1,28 @@
 package com.mauriciopm.mpcatalog.services;
 
 import com.mauriciopm.mpcatalog.dto.ProductDTO;
-import com.mauriciopm.mpcatalog.dto.ProductMinDTO;
+import com.mauriciopm.mpcatalog.entities.Category;
 import com.mauriciopm.mpcatalog.entities.Product;
 import com.mauriciopm.mpcatalog.repositories.CategoryRepository;
 import com.mauriciopm.mpcatalog.repositories.ProductRepository;
 import com.mauriciopm.mpcatalog.services.exceptions.DatabaseException;
 import com.mauriciopm.mpcatalog.services.exceptions.ResourceNotFoundException;
 import com.mauriciopm.mpcatalog.tests.Factory;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.provider.Arguments;
 import org.mockito.*;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 
 @ExtendWith(SpringExtension.class)
 public class ProductServiceTests {
@@ -44,15 +41,22 @@ public class ProductServiceTests {
     private long dependentId;
     private PageImpl<Product> page;
     private Product product;
+    private Category category;
+    private ProductDTO dto;
+
 
 
     @BeforeEach
     void setUp() throws Exception{
-        existingId =2L;
-        nonExistingId = 3L;
-        dependentId = 4L;
+        existingId =1L;
+        nonExistingId = 2L;
+        dependentId = 3L;
         product = Factory.createProduct();
+        category = Factory.createCategory();
         page = new PageImpl<>(List.of(product));
+        dto = Factory.createProductDTO();
+
+
 
         Mockito.doNothing().when(repository).deleteById(existingId);
         Mockito.doThrow(DataIntegrityViolationException.class).when(repository).deleteById(dependentId);
@@ -65,14 +69,33 @@ public class ProductServiceTests {
 
         Mockito.when(repository.findById(nonExistingId)).thenReturn(Optional.empty());
 
+        Mockito.when(repository.getReferenceById(existingId)).thenReturn(product);
+        Mockito.when(repository.getReferenceById(nonExistingId)).thenThrow(EntityNotFoundException.class);
 
-
-
+        Mockito.when(categoryRepository.getReferenceById(existingId)).thenReturn(category);
+        Mockito.when(categoryRepository.getReferenceById(nonExistingId)).thenThrow(EntityNotFoundException.class);
 
 
         Mockito.when(repository.existsById(existingId)).thenReturn(true);
         Mockito.when(repository.existsById(nonExistingId)).thenReturn(false);
         Mockito.when(repository.existsById(dependentId)).thenReturn(true);
+    }
+
+    @Test
+    public void updateShouldReturnProductDTOWhenIdExisting(){
+
+        ProductDTO result = service.update(existingId, dto);
+        Assertions.assertNotNull(result);
+
+    }
+
+    @Test
+    public void updateShouldThrowsResourceNotFoundExceptionWhenIdNotExisting() {
+
+        Assertions.assertThrows(ResourceNotFoundException.class,()-> {
+            service.update(nonExistingId,dto);
+        });
+
     }
 
     @Test
@@ -127,7 +150,7 @@ public class ProductServiceTests {
     }
 
     @Test
-    public void findByIdShouldResourceNotFoundExceptionWhenIdNotExisting() {
+    public void findByIdShouldThrowsResourceNotFoundExceptionWhenIdNotExisting() {
 
         Assertions.assertThrows(ResourceNotFoundException.class,()-> {
             ProductDTO result = service.findById(nonExistingId);
